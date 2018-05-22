@@ -86,7 +86,7 @@ object YourMom {
   }
 
   /**
-    * Start a listenern using rtmClient which will listen for any "odds are" challenges. This should be running whenever a challenge has not been initiated.
+    * Listen for your mom and kick Peter
     */
   def listenForYourMom(apiClient: SlackApiClient, rtmClient: SlackRtmClient, uidsToUsers: Map[String, User], channelIdToUsers: Map[String, User]): ActorRef = {
     val usernamesToUsers = uidsToUsers.map { case (id, user) =>
@@ -99,7 +99,7 @@ object YourMom {
       val sendMessage = (msg: String) => rtmClient.sendMessage(message.channel, msg)
       val messageContains = (substring: String) => message.text.toLowerCase().contains(substring): Boolean
 
-      if (message.user != rtmClient.state.self.id && !checkForCommands(rtmClient, message, "listening for challenges", None, None) && messageContains("ur mom")) {
+      if (message.user != rtmClient.state.self.id && !checkForCommands(rtmClient, message, "", None, None) && messageContains("ur mom")) {
         apiClient.kickFromGroup(message.channel, message.user)
       }
     }

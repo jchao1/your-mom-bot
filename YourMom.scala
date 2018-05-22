@@ -21,8 +21,10 @@ object YourMom {
   }
 
   def refreshAndRun(): Unit = {
-    val token = Source.fromFile("token.txt").mkString.replace("\n", "")
-    val apiClient = SlackApiClient(token)
+    val botToken = Source.fromFile("token.txt").mkString.replace("\n", "")
+    val userToken = Source.fromFile("usertoken.txt").mkString.replace("\n", "")
+    val apiClient = SlackApiClient(botToken)
+    val userApiClient = SlackApiClient(userToken)
     val resolvedSlackInfo: Future[(Seq[User], Seq[Im])] = for {
       users <- apiClient.listUsers()
       ims <- apiClient.listIms()
@@ -37,7 +39,7 @@ object YourMom {
           imChannel <- ims
           user <- usersMap.get(imChannel.user)
         } yield (imChannel.id, user)).toMap
-        listenForYourMom(apiClient, SlackRtmClient(token), usersMap, channelIdsMap)
+        listenForYourMom(userApiClient, SlackRtmClient(botToken), usersMap, channelIdsMap)
       }
       case Failure(err) => {
         println("[LOG] startup failed")
@@ -99,7 +101,6 @@ object YourMom {
 
       if (message.user != rtmClient.state.self.id && !checkForCommands(rtmClient, message, "listening for challenges", None, None) && messageContains("ur mom")) {
         apiClient.kickFromGroup(message.channel, message.user)
-
       }
     }
     listener

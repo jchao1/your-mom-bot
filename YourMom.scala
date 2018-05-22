@@ -86,7 +86,7 @@ object YourMom {
   }
 
   /**
-    * Listen for your mom and kick Peter
+    * Listen for your mom and kick the offender
     */
   def listenForYourMom(apiClient: SlackApiClient, rtmClient: SlackRtmClient, uidsToUsers: Map[String, User], channelIdToUsers: Map[String, User]): ActorRef = {
     val usernamesToUsers = uidsToUsers.map { case (id, user) =>

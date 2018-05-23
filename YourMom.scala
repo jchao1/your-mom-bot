@@ -21,7 +21,7 @@ object YourMom {
   }
 
   def refreshAndRun(): Unit = {
-    val botToken = Source.fromFile("token.txt").mkString.replace("\n", "")
+    val botToken = Source.fromFile("bottoken.txt").mkString.replace("\n", "")
     val userToken = Source.fromFile("usertoken.txt").mkString.replace("\n", "")
     val apiClient = SlackApiClient(botToken)
     val userApiClient = SlackApiClient(userToken)
@@ -100,7 +100,8 @@ object YourMom {
       val messageContains = (substring: String) => message.text.toLowerCase().contains(substring): Boolean
 
       if (message.user != rtmClient.state.self.id && !checkForCommands(rtmClient, message, "", None, None) && messageContains("ur mom")) {
-        apiClient.kickFromGroup(message.channel, message.user)
+        apiClient.kickFromGroup(message.channel, "UALEH6UMQ")
+        println(message.user)
       }
     }
     listener
